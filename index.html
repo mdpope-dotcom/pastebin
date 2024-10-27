@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Pastebin</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        textarea { width: 100%; height: 100px; }
+        button { margin-top: 10px; }
+        .paste-list { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Simple Pastebin</h1>
+    <textarea id="pasteContent" placeholder="Enter your text here..."></textarea>
+    <button onclick="savePaste()">Save Paste</button>
+    
+    <div class="paste-list" id="pasteList"></div>
+
+    <script>
+        // Load pastes from local storage
+        function loadPastes() {
+            const pastes = JSON.parse(localStorage.getItem('pastes')) || [];
+            const pasteList = document.getElementById('pasteList');
+            pasteList.innerHTML = pastes.map((paste, index) => `
+                <div>
+                    <h4>Paste ${index + 1}</h4>
+                    <pre>${paste}</pre>
+                </div>
+            `).join('');
+        }
+
+        // Save a new paste to local storage
+        function savePaste() {
+            const content = document.getElementById('pasteContent').value;
+            if (!content) return;
+
+            const pastes = JSON.parse(localStorage.getItem('pastes')) || [];
+            pastes.push(content);
+            localStorage.setItem('pastes', JSON.stringify(pastes));
+            document.getElementById('pasteContent').value = '';
+            loadPastes();
+        }
+
+        // Initial load
+        loadPastes();
+    </script>
+</body>
+</html>
